@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Project:   OtherInbox -- SproutCore sample application w/ statecharts
+   Copyright: ©2009-2011 OtherInbox, Inc.
+   License:   Images are copyrighted and/or trademarked. All rights reserved.
+              Code (only) is licensed under an MIT license:
+   ========================================================================== */
+
+#flash {
+  background: #f3f3f3 sc_static('images/oi-theme-sprite.png') 0 -1326px repeat-x scroll;
+  color: #343434;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 36px;
+  right: 0px;
+  cursor: pointer;
+}
+
+#flash .sc-image-view {
+  background: transparent sc_static('images/oi-icons.png') 0 -2423px no-repeat;
+  height: 15px;
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  bottom: 10px;
+  width: 15px;
+}
+
+#flash.general {
+  background-color: #f3f3f3;
+  background-position: 0 -1326px;
+}
+
+#flash.success, #flash.notice {
+  background-color: #51b100;
+  background-position: 0 -1364px;
+}
+
+#flash.error {
+  background-color: #c9282d;
+  background-position: 0 -1440px;
+  color: #fff;
+}
+
+#flash.tip {
+  background-color: #ecaf02;
+  background-position: 0 -1402px;
+}
+
+#flash .message {
+  display: block;
+  height: 36px;
+  line-height: 36px;
+  padding-left: 66px;
+  position: absolute;
+  top: 0;
+  left: 9px;
+}
+
+#flash.tip .message {
+  background: sc_static('images/oi-icons.png') 0 -2701px no-repeat;
+}
+
+#flash.general .message {
+  background: sc_static('images/oi-icons.png') 0 -2760px no-repeat;
+}
+
+#flash.success .message, #flash.notice .message {
+  background: sc_static('images/oi-icons.png') 0 -2819px no-repeat;
+}
+
+#flash.error .message {
+  background: sc_static('images/oi-icons.png') 0 -2878px no-repeat;
+}

@@ -1,0 +1,2 @@
+open -a /Applications/Firefox.app http://localhost:4020/core_oi/en/current/tests.html
+open -a /Applications/Firefox.app http://localhost:4020/OI/en/current/tests.html

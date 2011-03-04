@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Project:   OtherInbox -- SproutCore sample application w/ statecharts
+   Copyright: ©2009-2011 OtherInbox, Inc.
+   License:   Images are copyrighted and/or trademarked. All rights reserved.
+              Code (only) is licensed under an MIT license:
+   ========================================================================== */
+
+#messages_button {
+  background: transparent sc_static('images/oi-icons.png') 0 -18px no-repeat;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+#messages_button:hover {
+  background-position: 0 -108px;
+}
+
+#messages_button.sel {
+  background-position: 0 -198px;
+}
+
+#receipts_button {
+  background: transparent sc_static('images/oi-icons.png') 0 -288px no-repeat;
+  position: absolute;
+  top: 0px;
+  left: 72px;
+}
+
+#receipts_button:hover {
+  background-position: 0 -378px;
+}
+
+#receipts_button.sel {
+  background-position: 0 -468px;
+}
+
+#coupons_button {
+  background: transparent sc_static('images/oi-icons.png') 0 -558px no-repeat;
+  position: absolute;
+  top: 0px;
+  left: 144px;
+}
+
+#coupons_button:hover {
+  background-position: 0 -648px;
+}
+
+#coupons_button.sel {
+  background-position: 0 -738px;
+}
+
+#calendar_button {
+  background: transparent sc_static('images/oi-icons.png') 0 -828px no-repeat;
+  position: absolute;
+  top: 0px;
+  left: 216px;
+}
+
+#calendar_button:hover {
+  background-position: 0 -918px;
+}
+
+#calendar_button.sel {
+  background-position: 0 -1008px;
+}
+
+#help_button {
+  background: transparent sc_static('images/oi-icons.png') 0 -1098px no-repeat;
+  position: absolute;
+  top: 0px;
+  left: 288px;
+}
+
+#help_button:hover {
+  background-position: 0 -1188px;
+}
+
+#help_button.sel {
+  background-position: 0 -1278px;
+}
+
+#settings_button {
+  background: transparent sc_static('images/oi-icons.png') 0 -1368px no-repeat;
+  position: absolute;
+  top: 0px;
+  left: 360px;
+}
+
+#settings_button:hover {
+  background-position: 0 -1458px;
+}
+
+#settings_button.sel {
+  background-position: 0 -1548px;
+}
+
+#utilities {
+  color: #fff;
+  font-size: 11px;
+  position: absolute;
+  top: 24px;
+  right: 450px;
+  text-align: right;
+  width: 360px;
+}
+
+#utilities a {
+  font-size: 11px;
+  margin-left: 9px;
+  text-decoration: none;
+}
+
+#utilities a:link, #utilities a:visited {
+  color: #67c8ec;
+}
+
+#utilities a:hover, #utilities a:active {
+  color: #fff;
+}
+
+.oi-greeting {
+  font-size: 11px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+#utilities a.sign-out, #utilities a.admin {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  color: #67C8EC;
+}
+
+/* OI.ToolbarButtonView*/
+
+.toolbar_control {
+  color: #67c8ec;
+  cursor: pointer;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: normal;
+  height: 72px;
+  min-height: 72px;
+  text-decoration: none;
+  width: 72px;
+}
+
+.toolbar_control img {
+  display: block;
+  height: 24px;
+  line-height: 18px;
+  position: absolute;
+  top: 15px;
+  left: 22px;
+  width: 28px;
+}
+
+.toolbar_control span.label {
+  display: block;
+  height: 18px;
+  line-height: 18px;
+  position: absolute;
+  left: 0px;
+  text-align: center;
+  top: 42px;
+  width: 72px;
+}
+
+.toolbar_control:link, .toolbar_control:visited {
+  color: #67c8ec;
+}
+
+.toolbar_control:hover, .toolbar_control:active {
+  color: #fff;
+}
+
+.toolbar_control.sel {
+  color: #fff;
+}

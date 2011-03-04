@@ -1,0 +1,78 @@
+/* ==========================================================================
+   Project:   OtherInbox -- SproutCore sample application w/ statecharts
+   Copyright: ©2009-2011 OtherInbox, Inc.
+   License:   Images are copyrighted and/or trademarked. All rights reserved.
+              Code (only) is licensed under an MIT license:
+   ========================================================================== */
+
+#panellayout {
+  height: 24px;
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  width: 72px;
+}
+
+.panellayout .segment {
+  background: #cdcdcd sc_static('images/oi-icons.png') 0 -2664px no-repeat;
+  display: block;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 24px;
+}
+.panellayout .segment .button-inner {display: block; padding: 0;}
+.panellayout .segment .label {display: block; height: 24px; text-indent: -9999em; width: 24px;}
+.panellayout .segment-left {background-position: 0 -2664px; left: 0px;}
+.panellayout .segment-left.sel {background-position: 0 -2610px;}
+.panellayout .segment-inner {background-position: -24px -2664px;}
+.panellayout .segment-inner.sel {background-position: -24px -2610px;}
+.panellayout .segment-right {background-position: -48px -2664px; left: 48px;}
+.panellayout .segment-right.sel {background-position: -48px -2610px;}
+
+.focus .panellayout .segment-left {background-position: 0 -2637px;}
+.focus .panellayout .segment-left.sel {background-position: 0 -2610px;}
+.focus .panellayout .segment-inner {background-position: -24px -2637px;}
+.focus .panellayout .segment-inner.sel {background-position: -24px -2610px;}
+.focus .panellayout .segment-right {background-position: -48px -2637px; }
+.focus .panellayout .segment-right.sel {background-position: -48px -2610px;}
+
+#invite_friend_button_wrap {
+    position: absolute;
+    right:28px;
+    bottom:7px;
+}
+
+#ajax_activity {
+  float:right;
+  position:relative;
+  margin-right: -132px;
+}
+
+#ajax_activity img{
+  position:relative;
+}
+
+#search {
+  font-size: 12px;
+  line-height: 18px;
+  position: absolute;
+  top: 7px;
+  right: 40px;
+}
+
+#search label {
+  color: #343434;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 0 #fff;
+  text-transform: uppercase;
+}
+
+.oi-theme.blur #search label {
+  color: #999;
+}
+
+.oi-theme.blur #query {
+  background-color: #eee;
+}

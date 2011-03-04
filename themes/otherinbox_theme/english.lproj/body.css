@@ -1,0 +1,417 @@
+/* ==========================================================================
+   Project:   OtherInbox -- SproutCore sample application w/ statecharts
+   Copyright: ©2009-2011 OtherInbox, Inc.
+   License:   Images are copyrighted and/or trademarked. All rights reserved.
+              Code (only) is licensed under an MIT license:
+   ========================================================================== */
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
+blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em,
+font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody,
+tfoot, thead, tr, th, td {
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+  border-left-width: 0px;
+  font-family: inherit;
+  font-size: 100%;
+  font-style: inherit;
+  font-weight: inherit;
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  vertical-align: baseline;
+}
+
+body {
+  overflow: hidden;
+}
+
+.sc-thumb-view {
+  z-index: 1000000;
+}
+
+.sc-collection-item {
+  font-size: 12px;
+  font-family: Helvetica, Verdana, sans-serif;
+  font-weight: 400;
+  color: #343434;
+}
+
+.sc-collection-item label {
+  font-size: 12px;
+  left: 9px;
+}
+
+.sc-collection-item .icon {
+  margin-top: -16px;
+  left: 9px;
+  width: 28px;
+  height: 28px;
+}
+
+.sc-collection-item .count {
+  position: absolute;
+  display: block;
+  right: 5px;
+  top: 50%;
+  margin-top: -8px;
+  height: 14px;
+  background-color: #67C8EC;
+  text-align: center;
+  padding-left: 7px;
+  padding-right: 9px;
+  padding-top: 2px;
+  line-height: 13px;
+  color: #FFF;
+  font-size: 11px;
+  font-weight: bold;
+  border: 0px #67C8EC solid;
+  letter-spacing: 0px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+}
+
+.sc-collection-item.sel label {
+  color: #343434;
+  font-weight: bold;
+}
+
+.sc-collection-item.sel .count {
+  background-color: #FFF;
+  border: 0px #FFF solid;
+  color: #000;
+}
+
+#folder-list .sc-collection-item .sc-icon {
+  height: 28px;
+  width: 28px;
+}
+
+#folder-list .sc-collection-item .sc-count {
+  top: 9px;
+}
+
+#folder-list div.sc-outline img.icon {
+  left: 9px !important;
+  margin-top: -14px !important;
+  position: absolute !important;
+  top: 50% !important;
+}
+
+#folder-list div.sc-outline label {
+  margin-top: -9px !important;
+  left: 42px !important;
+}
+
+#folder-list {
+  background-color: rgb(204, 237, 248) !important;
+}
+
+#folder-list .sc-collection-item {
+  background-color: rgb(204, 237, 248);
+  border-top: 1px solid white;
+  border-bottom: 1px solid rgb(153, 218, 242);
+}
+
+#folder-list .sc-collection-item.sel {
+  border-top: 1px solid rgb(52, 182, 228);
+  border-bottom: 1px solid #67C8EC;
+  background-color: #67C8EC;
+}
+
+#folder-list .sc-collection-item.sel.first {
+  border-bottom: 1px solid #67C8EC;
+  border-top: 1px solid rgb(153, 218, 242);
+}
+
+#folder-list .sc-collection-item.last {
+  border-bottom: 1px solid rgb(153, 218, 242);
+}
+
+#folder-list .sc-collection-item.sel.last {
+  border-bottom: 1px solid #67C8EC;
+}
+
+#mailbox-list {
+  border-left: 1px solid rgb(153, 218, 242);
+  background-color: #EAF8FC;
+}
+
+#mailbox-list .sc-collection-item {
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #d2eff9;
+  line-height: 27px;
+}
+
+#mailbox-list .sc-collection-item label {
+  font-weight: 400;
+  font-family: Helvetica,Verdana,sans-serif;
+  font-size: 12px;
+}
+
+#mailbox-list .sc-collection-item.sel {
+  background: #ccedf8;
+  border-top: 1px solid #aae0f4;
+  border-bottom: 1px solid #aae0f4;
+}
+
+#mailbox-list.focus .sc-collection-item.sel {
+  background: #67C8EC;
+}
+
+#message-list {
+  background-color: #fff;
+}
+
+#message-list .sc-collection-item {
+  font-size: 12px;
+  color: #000;
+}
+
+#message-list .sc-collection-item.sel {
+  background: #ccedf8;
+}
+
+#message-list.focus .sc-collection-item.sel {
+  background: #67C8EC;
+}
+
+#mailbox-split-right {
+  border-left: solid 1px #969696;
+}
+
+#message_tags .tag_button {
+  position: relative;
+  float: left;
+  margin-left: 0px;
+  margin-right: 3px;
+}
+
+#loading {
+  background: #003045 /*sc_static('images/modal.png')*/ 0 100% repeat-x;
+  color: #fff;
+  display: block;
+  font-size: 18px;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 100001; /* just above the feedback tab */
+}
+
+#loading .logo-loader img {
+  height: 86px;
+  margin: 180px 0 4px 0;
+  width: 350px;
+}
+
+#loading .start-loader img {
+  height: 32px;
+  width: 32px;
+  vertical-align: middle;
+}
+
+#wrapper {
+  min-width: 936px;
+  min-height: 380px;
+}
+
+#toolbar {
+  background: #000e14 sc_static('images/oi-theme-sprite.png') 0 0 repeat-x;
+}
+
+#layoutbar {
+  cursor: default;
+  background: #cdcdcd sc_static('images/layout_bar.png') 0 0 repeat-x;
+}
+
+#branding, #branding:link, #branding:visited {
+  background: transparent sc_static('images/logo_toolbar.png') 0 0 no-repeat;
+  cursor: pointer;
+  height: 54px;
+  position: absolute;
+  left: 36px;
+  top: 8px;
+  width: 172px;
+  min-height: 54px;
+}
+
+#branding:hover, #branding:active {
+  background-position: 0 -54px;
+}
+
+#nav {
+  overflow: visible;
+  font-family: Helvetica, Verdana, sans-serif;
+  font-size: 13px;
+}
+
+.admin, .sign-out {
+  position: relative;
+}
+
+#mailbox_buttons, #message_buttons, #compose_buttons {
+  cursor: default;
+  border-left-width: 0px;
+  border-bottom-width: 1px;
+  white-space: nowrap;
+}
+
+#message_buttons {
+  border-top: solid 1px #969696;
+  position: static;
+  height: 36px;
+}
+
+#message_tags {
+  padding: 5px 5px 0px 5px;
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #ddd;
+}
+
+#message_tags .tag_button {
+  height: 31px;
+}
+
+#message_tags .tag_label {
+  height: 14px;
+  line-height: 14px;
+  background-color: #FAF7D4;
+  border: 1px solid #F5EC90;
+  color: #000;
+  font-size: 11px;
+  padding: 2px 5px 2px 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+#message_tags .tagged .tag_label {
+  background-color: #67C8EC;
+  border: 1px solid #34B6E4;
+}
+
+.message_tags_small {
+  background-color: #ccedf8;
+  border: 1px solid #ccedf8;
+  color: #000;
+  display: inline-block;
+  height: 12px;
+  margin-left: 5px;
+  padding: 0px 3px 1px 3px;
+  font-size: 10px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.sc-collection-item.sel .message_tags_small {
+  background-color: #fff;
+  border: 1px solid #fff;
+  color: #000;
+}
+
+.mailbox_buttons, .message_buttons, .compose_buttons {
+  background: #b5b5b5 sc_static('images/oi-theme-sprite.png') 0 -240px repeat-x;
+  border-left: solid;
+  border-bottom: solid;
+  border-left-color: #fff;
+  border-bottom-color: #969696;
+  color: #343434;
+}
+
+span.subject, span.date_sent, span.sender {
+  height: 19px;
+  margin-right: -4px;
+  padding: 2px 0px 0px 6px;
+  margin-bottom: 5px;
+  overflow: hidden;
+}
+
+img.attachments {
+  display: inline;
+  margin: 0px 2px 0px 0px;
+  width: 12px;
+  height: 12px;
+}
+
+span.sender {
+  text-transform: capitalize;
+}
+
+.oi-truncate {
+  overflow: hidden;
+}
+
+#message_detail {
+  padding: 9px;
+  border-bottom: 1px solid #aeaeae;
+}
+
+#message_detail span.label {
+  color: #969696;
+  display: inline-block;
+  display: -moz-inline-box;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: right;
+  text-transform: uppercase;
+  width: 72px;
+}
+
+.unread {
+  font-weight: bold !important;
+}
+
+.stale {
+  color: #D6D6D6 !important;
+}
+
+.mailbox-inbox {
+  background: transparent sc_static('images/oi-icons.png') 0 -1710px no-repeat;
+}
+
+.mailbox-saved {
+  background: transparent sc_static('images/oi-icons.png') 0 -1741px no-repeat;
+}
+
+.mailbox-trash {
+  background: transparent sc_static('images/oi-icons.png') 0 -1772px no-repeat;
+}
+
+.mailbox-sent {
+  background: transparent sc_static('images/oi-icons.png') 0 -1803px no-repeat;
+}
+
+.mailbox-drafts {
+  background: transparent sc_static('images/oi-icons.png') 0 -1834px no-repeat;
+}
+
+.mailbox-blocked {
+  background: transparent sc_static('images/oi-icons.png') 0 -1865px no-repeat;
+}
+
+.mailbox-smart {
+  background: transparent sc_static('images/oi-icons.png') 0 -1896px no-repeat;
+}
+
+.settings-identity {
+  background: transparent sc_static('images/oi-icons.png') 0 -1927px no-repeat;
+}
+
+.settings-notifications {
+  background: transparent sc_static('images/oi-icons.png') 0 -1958px no-repeat;
+}
+
+.settings-domains {
+  background: transparent sc_static('images/oi-icons.png') 0 -1989px no-repeat;
+}
+
+.settings-export {
+  background: transparent sc_static('images/oi-icons.png') 0 -2020px no-repeat;
+}

@@ -1,0 +1,528 @@
+/* ==========================================================================
+   Project:   OtherInbox -- SproutCore sample application w/ statecharts
+   Copyright: ©2009-2011 OtherInbox, Inc.
+   License:   Images are copyrighted and/or trademarked. All rights reserved.
+              Code (only) is licensed under an MIT license:
+   ========================================================================== */
+
+a.sc-button-view:active,
+a.sc-button-view:focus {
+  outline: none ;  
+}
+
+a.sc-button-view {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: #343434;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+a.sc-button-view img {
+  border: none;
+}
+
+a.regular {
+  display: -moz-inline-box;
+  display: inline-block;
+  font-size: 13px;
+  height: 24px;
+  min-width: 32px;
+  padding-right: 20px;
+  text-align: center;
+  margin-left: 2px;
+  margin-right: 2px ;
+}
+
+a.regular img {
+  position: absolute ;
+  top: 3px;
+  left: 12px;  
+}
+
+a.regular span.button-inner {
+  display: block ;
+  height: 24px;
+  position: relative ;
+  max-height: 24px;
+}
+
+a.regular span.label {
+   display: block ;
+  text-align: center;
+  height: 24px;
+  line-height: 24px;
+  vertical-align: middle;
+  margin-left: 20px;
+  text-shadow: #fff 0px 1px 0px;
+}
+
+a.regular.image span.label {
+  padding-left: 12px;
+  margin-right: -2px;
+}
+
+.oi-theme.blur a.regular,
+.oi-theme.focus a.regular.disabled,
+.compose_button_wrap .sc-button-view.regular.mini,
+.new_mailbox_button_wrap .sc-button-view.regular.mini {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -806px;
+}
+
+.oi-theme.blur a.regular span.button-inner,
+.oi-theme.focus a.regular.disabled span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -754px;
+}
+
+.oi-theme.blur a.regular span.label, 
+.oi-theme.focus a.regular.disabled span.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -780px;
+  color: #999;
+  text-shadow: none;
+}
+
+.oi-theme.blur a.regular.sel, 
+.oi-theme.blur a.regular.def, 
+
+.oi-theme.focus a.regular.sel.disabled, 
+.oi-theme.focus a.regular.def.disabled {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -806px;
+}
+
+.oi-theme.blur a.regular.sel span.button-inner,
+.oi-theme.blur a.regular.def span.button-inner,
+
+.oi-theme.focus a.regular.sel.disabled span.button-inner,
+.oi-theme.focus a.regular.def.disabled span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -754px;
+}
+
+.oi-theme.blur a.regular.def span.label, 
+.oi-theme.blur a.regular.sel span.label, 
+
+.oi-theme.focus a.regular.def.disabled span.label, 
+.oi-theme.focus a.regular.sel.disabled span.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -780px;
+  color: #999;
+  text-shadow: none;
+}
+
+.oi-theme a.regular {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat right -650px;
+}
+
+.oi-theme a.regular span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -598px;
+}
+
+.oi-theme a.regular span.label {
+   background: transparent sc_static('images/oi-theme-sprite.png') repeat-x left -624px;
+}
+
+.oi-theme a.regular.sel {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -650px;
+}
+
+.oi-theme a.regular.sel span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -598px;
+}
+
+.oi-theme a.regular.sel span.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -624px;
+  text-shadow: #fff 0px 1px 0px;
+}
+
+.oi-theme a.regular.sel.active {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -728px;
+}
+
+.oi-theme a.regular.sel.active span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -676px;
+}
+
+.oi-theme a.regular.sel.active span.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -702px;
+  text-shadow: #fff 0px 1px 0px;
+}
+
+.oi-theme a.regular.def {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -494px;
+}
+
+.oi-theme a.regular.def span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -442px;
+}
+
+.oi-theme a.regular.def span.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -468px;
+  color: #fff;
+  text-shadow: #343434 0px -1px 0px;
+}
+
+.oi-theme a.regular.def.active {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -572px;
+}
+
+.oi-theme a.regular.def.active span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -520px;
+}
+
+.oi-theme a.regular.def.active span.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -546px;
+  text-shadow: #343434 0px 1px 0px;
+}
+
+.oi-theme a.regular.active {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -728px;
+}
+
+.oi-theme a.regular.active span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -676px;
+}
+
+.oi-theme a.regular.active span.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -702px;
+  text-shadow: #fff 0px 1px 0px;
+}
+
+.oi-theme a.regular.segment.segment-inner,
+.oi-theme a.regular.segment.segment-left,
+.oi-theme a.regular.segment.segment-right span.button-inner,
+.oi-theme a.regular.segment.segment-inner span.button-inner {
+  background: none;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.oi-theme a.regular.segment.segment-inner,
+.oi-theme a.regular.segment.segment-left {
+  margin-right: 0;  
+}
+
+.oi-theme a.regular.segment.segment-inner,
+.oi-theme a.regular.segment.segment-right,
+.oi-theme a.regular.segment.segment-inner span.label,
+.oi-theme a.regular.segment.segment-right span.label {
+  margin-left: 0;  
+}
+
+.oi-theme a.regular.segment.segment-inner span.label,
+.oi-theme a.regular.segment.segment-left span.label {
+  padding-right: 12px;
+}
+
+.oi-theme a.regular.segment.segment-inner span.label,
+.oi-theme a.regular.segment.segment-right span.label {
+  padding-left: 12px;
+}
+
+.oi-theme a.regular.segment.segment-left span.label {
+  margin-left: 16px;
+}
+
+.oi-theme a.regular.segment.segment-right {
+  padding-right: 16px;
+}
+
+.oi-theme a.regular.segment.segment-inner,
+.oi-theme a.regular.segment.segment-left {
+  border-right: 1px #888 solid ;
+}
+
+.oi-theme .sc-square-theme a.regular.segment.segment-inner,
+.oi-theme .sc-square-theme a.regular.segment.segment-left {
+  border-right: 1px solid #625560;
+}
+
+.oi-theme .sc-square-theme a.regular.segment.segment-inner.disabled,
+.oi-theme .sc-square-theme a.regular.segment.segment-left.disabled {
+  border-right: 1px solid #888;
+}
+
+.oi-theme a.segment span.label {
+  font-weight: normal; 
+}
+
+.oi-theme a.checkbox {
+  margin-right: 4px;
+  margin-left: 4px;
+}
+
+.oi-theme a.checkbox img.button {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle ;
+  position: relative ;
+  top: -1px;
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -32px -728px;
+} 
+
+.oi-theme a.checkbox.sel img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0px -728px;
+}
+
+.oi-theme a.checkbox.mixed img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -16px -744px;
+}
+
+.oi-theme a.checkbox.disabled {
+  color: #999;
+}
+
+.oi-theme a.checkbox.disabled img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -760px;
+} 
+
+.oi-theme a.checkbox.sel.disabled img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0px -760px;
+}
+
+.oi-theme a.checkbox.mixed.disabled img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -760px;
+}
+
+.oi-theme a.checkbox.active img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0px -744px;
+} 
+
+.oi-theme a.checkbox.sel.active img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -16px -728px;
+}
+
+.oi-theme a.checkbox.mixed.active img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -32px -744px;
+}
+
+.oi-theme a.radio {
+  margin-right: 4px;
+  margin-left: 4px;
+}
+
+.oi-theme a.radio img.button {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle ;
+  position: relative ;
+  top: -1px;
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0px -776px;
+} 
+
+.oi-theme a.radio.sel img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -16px -760px;
+}
+
+.oi-theme a.radio.mixed img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -32px -776px;
+}
+
+.oi-theme a.radio.disabled {
+  color: #999;
+}
+
+.oi-theme a.radio.disabled img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -16px -792px;
+} 
+
+.oi-theme a.radio.sel.disabled img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -16px -792px;
+}
+
+.oi-theme a.radio.mixed.disabled img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -16px -792px;
+}
+
+.oi-theme a.radio.active img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -16px -776px;
+} 
+
+.oi-theme a.radio.sel.active img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat -32px -760px;
+}
+
+.oi-theme a.radio.mixed.active img.button {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0px -792px;
+}
+
+.oi-theme a.square {
+  display: -moz-inline-box;
+  display: inline-block;
+  font-size: 13px;
+  height: 23px;
+  text-align: center;
+  margin-left: 2px;
+  margin-right: 2px ;
+  background: sc_static('images/oi-theme-sprite.png') no-repeat left -1104px;
+   padding-left: 8px;
+}
+
+.oi-theme a.square span.button-inner {
+  display: block ;
+  padding-right: 8px;
+   background: transparent sc_static('images/oi-theme-sprite.png') repeat-x right -1150px;
+   margin-right: -2px;
+}
+
+.oi-theme a.square span.label {
+   background: transparent sc_static('images/oi-theme-sprite.png') no-repeat 0px -1127px;
+   display: block ;
+  text-align: center;
+  padding-top: 3px;
+  height: 19px;
+}
+
+.oi-theme a.square.sel, 
+.oi-theme a.square.active {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x left -1173px;
+}
+
+.oi-theme a.square.sel span.button-inner, 
+.oi-theme a.square.active span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x right -1219px;
+}
+
+.oi-theme a.square.sel span.label, 
+.oi-theme a.square.active span.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x right -1196px;
+}
+
+.oi-theme a.square.disabled {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x left -1242px;
+  color: #999;
+}
+
+.oi-theme a.square.disabled span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x right -1288px;
+}
+
+.oi-theme a.square.disabled span.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x right -1265px;
+}
+
+.oi-theme a.popup, 
+.oi-theme a.dropdown {
+  display: -moz-inline-box;
+  display: inline-block;
+  font-size: 13px;
+  height: 22px;
+  min-width: 32px;
+  padding-right: 32px;
+  text-align: center;
+  margin-left: 2px;
+  margin-right: 2px ;
+}
+
+.oi-theme a.dropdown {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -565px;
+}
+
+.oi-theme a.popup {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -565px;
+}
+
+
+.oi-theme a.dropdown span.button-inner,
+.oi-theme a.popup span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -519px;
+  display: block ;
+  height: 22px;
+}
+
+.oi-theme a.dropdown span.label,
+.oi-theme a.popup span.label {
+   background: transparent sc_static('images/oi-theme-sprite.png') repeat-x 0px -542px;
+   display: block ;
+  font-weight: normal;
+  text-align: left;
+  padding-top: 3px;
+  height: 19px;
+  margin-left: 13px;
+}
+
+.oi-theme a.dropdown.active {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -634px;
+}
+
+.oi-theme a.popup.active {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -634px;
+}
+
+.oi-theme a.dropdown.active span.button-inner,
+.oi-theme a.popup.active span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -588px;
+}
+
+.oi-theme a.dropdown.active span.label,
+.oi-theme a.popup.active span.label {
+   background: transparent sc_static('images/oi-theme-sprite.png') repeat-x left -611px;
+}
+
+.oi-theme a.dropdown.disabled,
+.oi-theme.blur a.dropdown {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -703px;
+}
+
+.oi-theme.blur a.popup,
+.oi-theme a.popup.disabled {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -703px;
+}
+
+.oi-theme.blur a.dropdown span.button-inner,
+.oi-theme.blur a.popup span.button-inner,
+.oi-theme a.dropdown.disabled span.button-inner,
+.oi-theme a.popup.disabled span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -657px;
+}
+
+.oi-theme.blur a.dropdown span.label,
+.oi-theme.blur a.popup span.label,
+.oi-theme a.dropdown.disabled span.label,
+.oi-theme a.popup.disabled span.label {
+   background: transparent sc_static('images/oi-theme-sprite.png') repeat-x left -680px;
+   color: #999;
+}
+
+.oi-theme a.disclosure {
+  margin-right: 4px;
+  margin-left: 4px;
+}
+
+.oi-theme a.disclosure img.button {
+  width: 12px;
+  height: 12px;
+  vertical-align: middle ;
+  position: relative ;
+  top: -2px;
+  background-image: sc_static('images/oi-theme-sprite.png') ;
+} 
+
+.oi-theme a.disclosure .label {
+  padding-left: 2px;
+}
+
+.oi-theme a.disclosure.sel img.button {
+  background-position: 0px -1008px ;
+}
+
+.oi-theme a.disclosure img.button {
+  background-position: -16px -1025px ;
+}
+
+.oi-theme a.disclosure.sel.disabled img.button {
+  background-position: 0px -1024px ;
+}
+
+.oi-theme a.disclosure.disabled img.button {
+  background-position: -16px -1041px ;
+}
+
+.oi-theme a.disclosure.sel.active img.button {
+  background-position: -16px -1008px ;
+}
+
+.oi-theme a.disclosure.active img.button {
+  background-position: -0px -1041px ;
+}

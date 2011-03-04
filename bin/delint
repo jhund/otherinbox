@@ -1,0 +1,4 @@
+#!/bin/bash
+# note you must have the Rhino JS interpreter installed for this to work; http://www.mozilla.org/rhino/download.html
+
+find `pwd`/apps/other_inbox `pwd`/frameworks/core_oi -name "*.js" -exec java org.mozilla.javascript.tools.shell.Main bin/jslint.js {} \;

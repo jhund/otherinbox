@@ -1,0 +1,232 @@
+/* ==========================================================================
+   Project:   OtherInbox -- SproutCore sample application w/ statecharts
+   Copyright: ©2009-2011 OtherInbox, Inc.
+   License:   Images are copyrighted and/or trademarked. All rights reserved.
+              Code (only) is licensed under an MIT license:
+   ========================================================================== */
+
+span.mini,
+a.mini,
+a.regular.mini {
+  display: -moz-inline-box;
+  display: inline-block;
+  font-size: 11px;
+  height: 18px;
+  min-width: 32px;
+  padding-right: 9px;
+  text-align: center;
+  margin-left: 0px;
+  margin-right: 9px;
+}
+
+.mini img {
+  position: absolute;
+  top: 1px;
+  left: 6px;
+}
+
+.mini span.button-inner,
+.regular.mini span.button-inner{
+  display: block;
+  height: 24px;
+  position: relative;
+  max-height: 24px;
+}
+
+span.mini span.label,
+a.mini span.label,
+a.regular.mini span.label  {
+  color: #343434;
+  display: block;
+  font-size: 11px;
+  text-align: center;
+  height: 24px;
+  line-height: 17px;
+  vertical-align: middle;
+  margin-left: 7px;
+  text-shadow: #fff 0px 1px 0px;
+}
+
+.mini.image input.label {
+  padding-left: 9px;
+  margin-right: -2px;
+}
+
+.oi-theme.blur .mini,
+.oi-theme.focus .mini.disabled,{
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -1186px;
+}
+
+.oi-theme.blur .mini span.button-inner,
+.oi-theme.focus .mini.disabled span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -1146px;
+}
+
+.oi-theme.blur .mini input.label, 
+.oi-theme.focus .mini.disabled input.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -1166px;
+  color: #999;
+  text-shadow: none;
+}
+
+.oi-theme.blur .mini.sel, 
+.oi-theme.blur .mini.def, 
+
+.oi-theme.focus .mini.sel.disabled, 
+.oi-theme.focus .mini.def.disabled {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -1186px;
+}
+
+.oi-theme.blur .mini.sel span.button-inner,
+.oi-theme.blur .mini.def span.button-inner,
+
+.oi-theme.focus .mini.sel.disabled span.button-inner,
+.oi-theme.focus .mini.def.disabled span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -1146px;
+}
+
+.oi-theme.blur .mini.def input.label, 
+.oi-theme.blur .mini.sel input.label, 
+
+.oi-theme.focus .mini.def.disabled input.label, 
+.oi-theme.focus .mini.sel.disabled input.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -1166px;
+  color: #999;
+  text-shadow: none;
+}
+
+.oi-theme .mini {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat right -1186px;
+}
+
+.oi-theme .mini span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -1146px;
+}
+
+.oi-theme .mini input.label {
+  background: transparent sc_static('images/oi-theme-sprite.png') repeat-x left -1166px;
+  padding: 0 1px;
+}
+
+.oi-theme .mini.sel {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -1186px;
+}
+
+.oi-theme .mini.sel span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -1146px;
+}
+
+.oi-theme .mini.sel input.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -1166px;
+  text-shadow: #fff 0px 1px 0px;
+}
+
+.oi-theme .mini.sel.active {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -1186px;
+}
+
+.oi-theme .mini.sel.active span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -1146px;
+}
+
+.oi-theme .mini.sel.active input.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -1166px;
+  text-shadow: #fff 0px 1px 0px;
+}
+
+.oi-theme .mini.def {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -1246px;
+}
+
+.oi-theme .mini.def span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -1206px;
+}
+
+.oi-theme .mini.def input.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -1226px;
+  color: #343434;
+  text-shadow: #fff 0px 1px 0px;
+}
+
+.oi-theme .mini.def.active {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -1246px;
+}
+
+.oi-theme .mini.def.active span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -1206px;
+}
+
+.oi-theme .mini.def.active input.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -1226px;
+  text-shadow: #fff 0px 1px 0px;
+}
+
+.oi-theme .mini.active {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -1186px;
+}
+
+.oi-theme .mini.active span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -1146px;
+}
+
+.oi-theme .mini.active input.label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -1166px;
+  text-shadow: #fff 0px 1px 0px;
+}
+
+.oi-theme .mini.invite_friends_button,
+.oi-theme.blur .mini.invite_friends_button,
+.oi-theme .mini.active.invite_friends_button {
+  background: transparent sc_static('images/oi-theme-sprite.png') no-repeat scroll right -1306px;
+}
+
+.oi-theme .mini.invite_friends_button span.button-inner,
+.oi-theme.blur .mini.invite_friends_button span.button-inner,
+.oi-theme .mini.active.invite_friends_button span.button-inner {
+  background: sc_static('images/oi-theme-sprite.png') no-repeat 0 -1266px;
+}
+
+.oi-theme .mini.invite_friends_button .label,
+.oi-theme.blur .mini.invite_friends_button .label,
+.oi-theme .mini.active.invite_friends_button .label {
+  background: sc_static('images/oi-theme-sprite.png') repeat-x 0 -1286px;
+  color:#fff;
+  text-shadow: #00a335 0px 1px 0px;
+  font-size:12px;
+  font-weight: bold;
+}
+.oi-theme .mini.invite_friends_button img,
+.oi-theme.blur .mini.invite_friends_button img,
+.oi-theme .mini.active.invite_friends_button img {
+    position:relative;
+    top:0px; left:4px;
+    height:10px; width: 10px;
+    background:transparent sc_static('images/oi-icons.png') no-repeat scroll -28px -2423px ;
+}
+
+#layoutbar a.regular.mini
+{ 
+  height: 24px;
+ }
+
+#invite_friend_button_wrap
+{ 
+  margin-right: 28px;
+  margin-top: 10px;
+}
+
+#invite_friends_button{ width:97px; }
+
+#invite_friends_button label
+{ 
+  line-height: 17px;
+ }
+
+#compose_button_wrap .label,
+#new_mailbox_button_wrap .label
+{ 
+  padding-top: 1px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 22px;
+ }

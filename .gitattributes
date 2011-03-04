@@ -1,0 +1,2 @@
+*.graffle -crlf -diff -merge
+*.numbers -crlf -diff -merge

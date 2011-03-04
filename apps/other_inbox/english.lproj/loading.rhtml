@@ -1,0 +1,391 @@
+<% content_for :loading do -%>
+
+<noscript>
+  <br/>
+  <p class="start-loader">
+    We're sorry, but it appears your browser does not support Javascript.<br/>
+    Please enable Javascript or try another browser.
+  </p>
+  <br/>
+  <p class="start-loader">
+    If you need help, please visit <a href="http://help.otherinbox.com/" style='color:#67C8EC;'>our help site</a>.
+  </p>
+</noscript>
+
+<script type="text/javascript">
+
+// adapted from http://www.javascriptkit.com/jsref/ajax.shtml
+function OIAjaxRequest() {
+  var activexmodes = ["Msxml2.XMLHTTP", "Microsoft.XMLHTTP"] ; // activeX versions to check for in IE
+  if (window.ActiveXObject) {
+    // test for support for ActiveXObject in IE first (as XMLHttpRequest in IE7 is broken)
+    for (var i=0; i<activexmodes.length; ++i) {
+      try { return new ActiveXObject(activexmodes[i]); }
+      catch(e) { /* suppress error */ }
+    }
+  } else if (window.XMLHttpRequest) {
+    // if Mozilla, Safari etc
+    return new XMLHttpRequest() ;
+  } else { return null; }
+}
+
+// state variables (strings)
+OIState = null ;        // only valid when OIState !== 'Running'
+OIStartupState = null ; // only valid when OIState === 'Startup'
+OIErrorState = null ;   // only valid when OIState === 'Error'
+
+// extended state variables
+OIAppIsReady = false ;
+OIShouldDisplayBrowserWarning = true ; // TODO get from a cookie or user defaults
+OIRequest = null ; // our Ajax request, examined during a timeout
+OITimeoutID = null ; // to allow us to clear a pending timeout
+
+// global variables
+OIErrorText = "" ;
+
+// xhr callback event handling
+// (note: called with XMLHttpRequest === this)
+function OIAjaxCallback() {
+  if (this.readyState === 4) {
+    clearTimeout(OITimeoutID) ; // we're definitely leaving the current state
+    OITimeoutID = null ; // not required, but better to be safe...
+    
+    // logic is a little convoluted here to reduce code duplication between
+    // the Check Login and Query Server states, which handle the readyState 4
+    // event identically except for their 200 OK responses
+    if (OIState === 'Startup') {
+      switch (this.status) {
+        case 200:
+          if (OIStartupState === 'Check Login') {
+            // check-login.js call returns some JavaScript for us to eval()
+            var js = this.responseText || '' ;
+            if (js.length > 0) eval(js) ;
+              // TODO use a try-catch clause here
+            
+            // if we make it this far, the user is logged in and using the 
+            // correct protocol
+            goDetectBrowser() ;
+          } else if (OIStartupState === 'Query Server') {
+            if (OIAppIsReady) {
+              enterApplication() ;
+              goRunning() ;
+            } else { goReady(); }
+          }
+        break;
+        
+        case 302:
+          // This happens when user attempts to use SSL, but has not 
+          // subscribed to SSL, or attempts to use non-SSL, but has 
+          // subscribed to SSL. In this case, we need to reload the client 
+          // with the other protocol so that all requests use the proper 
+          // protocol, and we don't get 302'd
+          var new_protocol = location.protocol == 'http:' ? 'https:' : 'http:' ;
+          window.open(location.href.replace(/^.+?:/,new_protocol), '_self') ;
+        break;
+        
+        case 503:
+        case 504:
+          console.warn("There was a gateway error with the " + OIStartupState + " ajax: " + this.statusText) ;
+          OIErrorText = "We're sorry, it looks like there's a slow connection between your web browser and OtherInbox." ;
+          goError() ;
+          goServerError() ;
+        break
+        
+        case 500:
+          console.warn("There was a general error with the " + OIStartupState + " ajax: " + this.statusText) ;
+          goError() ;
+          goServerError() ;
+        break;
+        
+        default:
+          console.warn("There was an unknown problem with the " + OIStartupState + " ajax.") ;
+          goError() ;
+          goServerError() ;
+        break;
+      }
+    }
+  }
+};
+
+// timeout callback event handling
+function OITimeoutCallback() {
+  if (OIState === 'Startup') {
+    if (OIStartupState === 'Check Login') {
+      if (OIRequest.readyState < 4) {
+        OIErrorText = "A timeout occurred while checking your login." ;
+        goError() ;
+        goQueryTimedOut() ;
+        return ;
+      }
+    } else if (OIStartupState === 'Query Server') {
+      if (OIRequest.readyState < 4) {
+        OIErrorText = "A timeout occurred while loading your messages." ;
+        goError() ;
+        goQueryTimedOut() ;
+        return ;
+      }
+    }
+  }
+  console.warn("Unhandled OITimeoutCallback() should never happen!") ;
+};
+
+// main() callback event handling
+function main() {
+  if (OIState === 'Ready') {
+    enterApplication() ;
+    goRunning() ;
+  } else { OIAppIsReady = true; }
+};
+
+//
+// action helpers
+//
+function checkLogin() {
+  // TODO implement me!
+  
+  // simulate successful Ajax callback
+  clearTimeout(OITimeoutID) ; // we're definitely leaving the current state
+  OITimeoutID = null ; // not required, but better to be safe...
+  
+  // make state transition
+  goDetectBrowser() ; // HACK for now, just skip the check...
+};
+
+function queryServer() {
+//  // create a fresh Ajax request each time
+//  OIRequest = new OIAjaxRequest() ;
+//  
+//  // install our callback
+//  OIRequest.onreadystatechange = OIAjaxCallback ;
+//  
+//  // configure the request
+//  var url = '/refresh?type=startup&advanced=true' ;
+//    // TODO make this first request smart enough to ask for the 
+//    // folder and mailbox the user selected in the URL
+//  
+//  OIRequest.open("GET", url, true) ;
+//  OIRequest.setRequestHeader('Accept', 'application/json') ;
+//  
+//  // finally, send the request...
+//  OIRequest.send(null) ;
+
+  /* 
+    For now we are running with fixture, so skip the message to the server.
+  */
+  clearTimeout(OITimeoutID) ;
+  if (OIAppIsReady) {
+    enterApplication() ;
+    goRunning() ;
+  } else { goReady(); }
+};
+
+//
+// all of the goState() functions
+//
+function goStartup() {
+  OIState = 'Startup' ;
+  
+  // update the DOM
+  document.getElementById('startup').style.display = '' ;
+  document.getElementById('ready').style.display = 'none' ;
+  document.getElementById('error').style.display = 'none' ;
+};
+
+function goCheckLogin() {
+  OIStartupState = 'Check Login' ;
+  
+  // slightly odd, but this actually sets our app in motion because our first
+  // "event" is a response from our server (or a timeout if that fails to occur)
+  checkLogin() ;
+  
+  // update the DOM
+  document.getElementById('check-login').style.display = '' ;
+  document.getElementById('detect-browser').style.display = 'none' ;
+  document.getElementById('browser-warning').style.display = 'none' ;
+  document.getElementById('query-server').style.display = 'none' ;
+  
+  // set up our timeout callback
+  OITimeoutID = window.setTimeout(OITimeoutCallback, 3000) ; // 3 seconds
+};
+
+// this is a transient state, hence the code/logic inside...
+function goDetectBrowser() {
+  OIStartupState = 'Detect Browser' ;
+  
+  // update the DOM
+  document.getElementById('check-login').style.display = 'none' ;
+  document.getElementById('detect-browser').style.display = '' ;
+  document.getElementById('browser-warning').style.display = 'none' ;
+  document.getElementById('query-server').style.display = 'none' ;
+  
+  // [1] if browser is outdated or unknown, and shouldDisplayBrowserWarning
+  if (OIShouldDisplayBrowserWarning) {
+    // TODO enhance the Browser Warning state with substates for the following...
+    if (SC.browser.msie && new Number(SC.browser.version) < 7 && !(/MSIE 7.0/i).test(navigator.userAgent)) {
+      goBrowserWarning("It looks like you are using an older version of Internet Explorer. OtherInbox works best Internet Explorer 7, Firefox 3 or Safari 3.1.") ;
+    } else if (SC.browser.mozilla) {
+      var version = SC.browser.version.match(/.+?\..+?(?=\.)/) ;
+      if (version) {
+        version = new Number(version[0]) ;
+        if (version < 1.9) {
+          goBrowserWarning("It looks like you are using an older version of Firefox. OtherInbox works best Internet Explorer 7, Firefox 3 or Safari 3.1.") ;
+        }
+      }
+    } else if (SC.browser.safari && (new Number(SC.browser.version.split('.')[0]) < 523)) {
+      goBrowserWarning("It looks like you are using an older version of Safari. OtherInbox works best Internet Explorer 7, Firefox 3 or Safari 3.1 or 4.") ;
+    } else if (!SC.browser.msie && !SC.browser.mozilla && !SC.browser.safari) {
+      goBrowserWarning("OtherInbox works best with recent versions of Internet Explorer, Firefox, or Safari.  With other browsers, you may have difficulty.") ;
+    }
+  }
+  
+  // [2] (if we made it this far, the browser is okay)
+  goQueryServer() ;
+};
+
+function goBrowserWarning(msg) {
+  OIStartupState = 'Browser Warning' ;
+  
+  // update the DOM
+  document.getElementById('check-login').style.display = 'none' ;
+  document.getElementById('detect-browser').style.display = 'none' ;
+  document.getElementById('browser-warning').style.display = '' ;
+  document.getElementById('query-server').style.display = 'none' ;
+  
+  // TODO UI should have a button for "Try Again"
+  alert(msg) ; // HACK to give some feedback for now
+};
+
+function goQueryServer() {
+  OIStartupState = 'Query Server' ;
+  queryServer() ;
+  
+  // update the DOM
+  document.getElementById('check-login').style.display = 'none' ;
+  document.getElementById('detect-browser').style.display = 'none' ;
+  document.getElementById('browser-warning').style.display = 'none' ;
+  document.getElementById('query-server').style.display = '' ;
+  
+  // set up our timeout callback
+  OITimeoutID = window.setTimeout(OITimeoutCallback, 15000) ; // 15 seconds
+};
+
+function goReady() {
+  OIState = 'Ready' ;
+  
+  // update the DOM
+  document.getElementById('startup').style.display = 'none' ;
+  document.getElementById('ready').style.display = '' ;
+  document.getElementById('error').style.display = 'none' ;
+};
+
+function goError() {
+  OIState = 'Error' ;
+  
+  // update the DOM
+  document.getElementById('startup').style.display = 'none' ;
+  document.getElementById('ready').style.display = 'none' ;
+  document.getElementById('error').style.display = '' ;
+};
+
+function goServerError() {
+  OIErrorState = 'Server Error' ;
+  
+  // update the DOM
+  document.getElementById('server-error').style.display = '' ;
+  document.getElementById('query-timed-out').style.display = 'none' ;
+};
+
+function goQueryTimedOut() {
+  OIErrorState = 'Query Timed Out' ;
+  
+  // update the DOM
+  document.getElementById('server-error').style.display = 'none' ;
+  document.getElementById('query-timed-out').style.display = '' ;
+};
+
+function goRunning() {
+  OIState = 'Running' ;
+  
+  // update the DOM (only state that works like this...)
+  document.getElementById('loading').style.display = 'none' ;
+    // TODO animate this on Safari with a CSS animation
+};
+
+</script>
+
+<!-- keep this below the <script> above so we can refer to those callbacks -->
+
+<!-- this is visible in all loading states -->
+<p class="logo-loader">
+  <img src="<%= sc_static('images/logo_modal.png') %>" alt="OtherInbox" />
+</p>
+
+<!-- CSS IDs should reflect the state names and hierarchy, above -->
+<div id='startup' style='display:none;'>
+  
+  <div id='check-login' style='display:none;'>
+  </div>
+  
+  <div id='detect-browser' style='display:none;'>
+  </div>
+  
+  <div id='browser-warning' style='display:none;'>
+  </div>
+  
+  <div id='query-server' style='display:none;'>
+    <p class="start-loader">
+      <img src="<%= sc_static('images/start_loader.gif') %>" alt="Loading indicator" />
+      Loading&hellip;
+    </p>
+  </div>
+  
+  <div id='startup-error' style='display:none;'>
+    <p class="start-loader">
+      <span id='error-text'>We're sorry, but an error has occurred.</span>
+      Please <a href='#' onclick='location.reload(true);' style='color:#67C8EC;'>click here to reload OtherInbox</a>.
+    </p>
+  </div>
+  
+</div>
+
+<div id='error' style='display:none;'>
+  
+  <div id='server-error' style='display:none;'>
+    <p id='loading-indicator' class="start-loader" style='display:none;'>
+      <img src="<%= sc_static('images/start_loader.gif') %>" alt="Loading indicator" />
+      Loading&hellip;
+    </p>
+  </div>
+  
+  <div id='query-timed-out' style='display:none;'>
+    <p class="start-loader">
+      <span id='error-text'>We're sorry, but an error has occurred.</span>
+      Please <a href='#' onclick='location.reload(true);' style='color:#67C8EC;'>click here to reload OtherInbox</a>.
+    </p>
+  </div>
+  
+</div>
+
+<div id='ready' style='display:none;'>
+  <!-- in this state, we're waiting on our application's JavaScript to load -->
+</div>
+
+<script>
+
+// let's get our app started! enter our startup states...
+goStartup() ;
+
+// first, a small hack to work around not having Ajax in the first place...
+var req = new OIAjaxRequest() ;
+if (req === null) {
+  // Detect Browser will catch the problem, ensuring we don't need to handle
+  // lack of Ajax any where else in our application
+  goDetectBrowser() ;
+} else {
+  // yay! we've got Ajax, so enter the correct (default) substate of Startup
+  goCheckLogin() ;
+}
+
+</script>
+
+<% end -%>

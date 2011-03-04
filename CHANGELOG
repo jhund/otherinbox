@@ -1,0 +1,56 @@
+Changes coming with the new, statechart-based SC 1.0 client:
+============================================================
+
+Todo:
+// 0.9 bug fixes
+* [FIXED] messages are now actually moved after a drag and drop
+
+// interaction improvements
+* [NEW] mailboxes can now be dragged onto folders
+
+// new view-layer features
+* [NEW] message list columns are now resizable
+* [NEW] animations are now done in CSS on Safari 4
+* [NEW] added visible handles for mailbox-messages split divider
+
+// user defaults
+* [NEW] OtherInbox can save your selections persistently in a modern web browsers
+
+// spacebar-related
+* [NEW] pressing spacebar selects the next unread message in the current mailbox, or if there is none, in the next mailbox with an unread message
+* [NEW] when the user selects an unread message by pressing the spacebar, OtherInbox will now automatically prefetch the messages for the next mailbox with unread messages
+* [NEW] when the user selects an unread message by pressing the spacebar, the next unread message will also be downloaded into an offscreen iframe, making it pre-cached for the upcoming access, improving end-user performance
+
+// mailbox search
+* [NEW] typing while the mailbox list has focus will narrow the mailbox list down to just the matching mailboxes. Pressing ESC will end the search
+
+In progress:
+* [NEW] localized JavaScript strings used in the user interface
+* [CHANGED] standardize on CSS style naming
+
+Completed:
+* [NEW] tags and message details now scroll with the message body (need server-side support, CNAME for HTTP access and an SSL proxy for HTTPS)
+* [CHANGED] all state changes to messages appear to happen immediately -- they are no longer dependent on getting a fast server response
+* [CHANGED] single-selecting an unread message now immediately marks the message as read (selecting an unread message by extending an existing selection does not mark the message as read)
+* [FIXED] if a read messages was marked as unread, selecting it would not re-mark it as read without reloading the app
+* [NEW] OtherInbox now remembers your mailbox and message selections during usage
+* [CHANGED] creating a new mailbox now happens in a new window, instead of replacing the current window
+* [NEW] keyboard shortcuts for moving between the mailbox list and the message list -- use right to go to the messages, left to go to the mailboxes
+* [CHANGED] made undo button invisible until the functionality becomes available
+* [NEW] it is now possible to unblock a mailbox
+* [NEW] OtheInbox is now styled using SproutCore's "theming" support
+* [CHANGED] application buttons now respond on mouseDown:
+* [FIXED] the "Block Mailbox" button is no longer visible when the "Blocked" folder is selected
+* [CHANGED] scroll well is now always visible in the message list
+* [CHANGED] scroll well is now always visible in message area
+* [NEW] keyboard shortcuts for folder selection -- Control-1 for Inbox, Control-2 for Saved, etc.
+* [CHANGED] list item styling in folders, mailboxes and messages is now more consistent
+* [CHANGED] tags styling in the message list is now much prettier
+* [FIXED] scroll bars did not always appear in the mailbox and message list when needed
+* [CHANGED] new messages are no longer auto-selected (eliminating the previous 3 second timer workaround)
+* [CHANGED] mailbox selection now occurs on mouseDown (previously was on mouseUp)
+* [CHANGED] folder selection now occurs on mouseDown (previously was on mouseUp)
+* [CHANGED] the folder list is no longer "focusable"; selecting a new folder will move focus to the mailbox list for that folder
+* [CHANGED] dividers now have much larger targets for adjusting the splitter
+* [CHANGED] the entire right portion of the message detail button bar can be used to change the divider position
+* [CHANGED] mailbox list now supports incremental rendering, improving performance with very large numbers of mailboxes (requires server API support)

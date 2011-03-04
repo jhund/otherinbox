@@ -1,0 +1,175 @@
+#!/usr/bin/env ruby
+
+# remote repository to fetch from and push to
+remote_name = "origin"
+
+# branch to integrate *into* (i.e. to push upstream)
+integration_branch = 'origin/sc1_0'
+
+# IMPORTANT: You must create a local integration_branch from the remote
+# integration_branch before running sc-integrate.
+
+# This integration script is mean to be used to integrate downstream code into
+# the integration_branch. It is meant to integrate code from the following 
+# individuals:
+# - Mike (subelsky) -- yes, you need to integrate yourself...
+# - Ross (??)
+#
+# To begin integrating with this script, type this at the console:
+# $ sc-integrate subelsky ?? # replace ?? with Ross's namespace
+#
+# Once you've add them to sc-integrate, you don't need to add them again. Just
+# run this thereafter:
+# $ sc-integrate
+
+# Standard error handling
+def handle_errors(output)
+  if $? != 0
+    puts output
+    puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    puts "~ FATAL: Command failed with status #{$?}"
+    exit 1
+  end
+end
+
+# Standard Integration Process For Git:
+
+all_branches = `git branch`.split("\n").map { |line| line.sub(/^. /,'') }
+handle_errors(all_branches)
+merges = all_branches.select { |line| line =~ /^merge\// }
+
+if ARGV.size == 1 && %w(--reset --clobber).include?(ARGV[0])
+  `git checkout #{integration_branch}`
+  
+  if ARGV[0] == '--clobber'
+    puts "~ removing all sc1_0s branches"
+    sc1_0s = all_branches.select { |line| line =~ /^sc1_0s\// }
+    sc1_0s.each do |branch|
+      puts `git branch -D #{branch}`
+    end
+  end
+      
+  puts "~ removing all merge branches"
+  merges.each do |branch|
+    puts `git branch -D #{branch}`
+  end
+  
+  exit 1
+end
+
+# push integrator's own branches to remote repository before integration
+`git push #{remote_name}`
+
+# if usernames were passed, try to make sc1_0s branches from them
+if ARGV.size > 0
+  
+  # find all sc1_0 branches on origin
+  remotes = `git branch -r`.split("\n").map { |line| line.sub(/^. /,'') }
+  remotes.select { |branch| branch =~ /^#{remote_name}\/.+\/sc1_0$/ }
+    
+  sc1_0s = []
+  ARGV.each do |username|
+    branch = "sc1_0s/#{username}"
+    remote = "#{remote_name}/#{username}/sc1_0"
+    if !all_branches.include?(branch)
+      if remotes.include?(remote)
+        puts "~ creating sc1_0s branch for #{username} (git branch #{branch} #{remote})"
+        handle_errors `git branch #{branch} #{remote}`
+      else
+        puts "~ FATAL: no sc1_0 branch was found for #{username}"
+        exit 1
+      end
+    end
+    sc1_0s << branch
+  end
+else
+  sc1_0s = all_branches.select { |line| line =~ /^sc1_0s\// }
+end
+
+merged = []
+
+# For each sc1_0/foo branch:
+sc1_0s.each do |branch|
+  puts "\n** MERGING: #{branch} **"
+
+  #  pull
+  puts "~ update (git pull)"
+  puts `git fetch #{remote_name}`
+  puts `git merge #{integration_branch}`
+
+  #  create merge branch
+  #    - if branch already exists, complain and skip
+  merge_branch = branch.sub /^sc1_0s\//, 'merge/'
+  if merges.include? merge_branch
+    puts " ~ WARNING: merge branch #{merge_branch} already exists. Skipping."
+    next
+  else
+    puts "~ create merge branch (git branch #{merge_branch} #{branch})"
+    handle_errors `git checkout -b #{merge_branch} #{branch}`
+  end
+  
+  #  rebase from sc1_0
+  #    - if there are errors, stop and complain (leave merge branch)
+  puts "~ rebase from #{integration_branch} (git rebase #{integration_branch})"
+  puts `git rebase #{integration_branch}`
+  if $? != 0
+    puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    puts "~ FATAL: Rebase failed!\n"
+    puts "~ Aborting automatic integration so you can complete it manually."
+    puts "~ Complete or abort the rebase and then merge.  "
+    puts "~ Leave the #{merge_branch} branch in place if you want to skip"
+    exit 0
+  end
+  
+  #  get diff
+  #    - if no diff, log and skip
+  diff = `git diff #{integration_branch}`
+  if diff.size == 0
+    puts "~ No changes in this branch!  Skipping."
+    `git co #{integration_branch}`
+    handle_errors `git branch -D #{merge_branch}`
+    next
+
+  #  show diff.  ask user to confirm (w/ yes) if merge is allowed
+  #   - if NO, leave merge branch, log and skip
+  else
+    puts "~ Showing diff between #{merge_branch} and #{integration_branch}"
+    system 'git diff #{integration_branch}'
+    
+    puts "Approve merge? (y/n)"
+    approve = $stdin.gets
+    unless approve.downcase =~ /^y/
+      puts "~ Merge not approved.  Leaving merge branch in place.  Skipping"
+      next
+    end
+  end
+  
+  #  if yes, merge into sc1_0, delete merge branch
+  puts "~ checkout #{integration_branch} (git co #{integration_branch})"
+  merged << branch
+  handle_errors `git checkout #{integration_branch}`
+
+  puts "~ merging into #{integration_branch}"
+  puts `git merge #{merge_branch}`
+  
+  puts "~ delete merge branch (git branch -D #{merge_branch})"
+  handle_errors `git branch -D #{merge_branch}`
+  
+  puts "\n"
+end
+
+`git co #{integration_branch}`
+
+puts "\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+if merged.size == 0
+  puts "~ No branches merged. Nothing to push."
+else
+  merged.each { |branch| puts "~ merged: #{branch}" }
+  
+  puts "Would you like to push your #{integration_branch} now? (y/n)"
+  approve = $stdin.gets
+  unless approve.downcase =~ /^y/
+    puts "~ Pushing #{integration_branch} to remote #{remote_name}"
+    `git push #{remote_name} #{integration_branch}`
+  end
+end

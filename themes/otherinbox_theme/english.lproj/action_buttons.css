@@ -1,0 +1,220 @@
+/* ==========================================================================
+   Project:   OtherInbox -- SproutCore sample application w/ statecharts
+   Copyright: ©2009-2011 OtherInbox, Inc.
+   License:   Images are copyrighted and/or trademarked. All rights reserved.
+              Code (only) is licensed under an MIT license:
+   ========================================================================== */
+
+/* I'd like to see this better targeted to the actual buttons section of the 
+UI. As it is, they're global */
+
+.controls a {
+  cursor: pointer;
+}
+
+.action_button a {
+  cursor: pointer;
+  display: -moz-inline-box;
+  display: inline-block;
+  text-decoration: none;
+  height: 36px;
+  margin: 0 0 0 -4px;
+  padding: 0 12px 0 3px;
+}
+
+.action_button a img {
+  background-image: sc_static('images/oi-icons.png');
+  background-repeat: no-repeat;
+  height: 28px;
+  margin: -4px 0 0 0;
+  padding: 0;
+  vertical-align: middle;
+  width: 28px;
+}
+
+.action_button a .label {
+  display: -moz-inline-box;
+  display: inline-block;
+  color: #343434;
+  height: 36px;
+  line-height: 38px;
+  margin: 0;
+  padding: 0;
+}
+
+/* end section in need of targeting */
+
+.tag_button {
+  cursor: pointer;
+  display: -moz-inline-box;
+  display: inline-block;
+  height: 36px;
+  margin: 0;
+  padding: 0 5px 0 0;
+}
+
+.tag_label {
+  cursor: pointer;
+  display: -moz-inline-box;
+  display: inline-block;
+  height: 36px;
+  line-height: 38px;
+  margin: 0;
+  padding: 0;
+}
+
+#mark_read_button.action_button, #mark_unread_button.action_button, 
+#save_button.action_button, #mark_sel_unread_button.action_button, 
+#mark_sel_read_button.action_button, #send_message_button.action_button {
+  margin-left: 0px;
+}
+
+#mark_read_button.active, #mark_unread_button.active, #mark_sel_read_button.active,
+#mark_sel_unread_button.active, #delete_all_button.active, #block_all_button.active,
+#save_button.active, #reply_button.active, #forward_button.active, 
+#delete_button.active, #plain_button.active, #print_button.active, 
+#send_message_button.active, #save_draft_button.active, #undo_button.active {
+  background: transparent sc_static('images/oi-icons.png') 100% -2535px no-repeat;
+  color: #fff;
+}
+
+#mark_read_button.disabled a, #mark_unread_button.disabled a, 
+#mark_sel_read_button.disabled a, #mark_sel_unread_button.disabled a, 
+#delete_all_button.disabled a, #block_all_button.disabled a, 
+#save_button.disabled a, #reply_button.disabled a, 
+#forward_button.disabled a, #delete_button.disabled a, 
+#plain_button.disabled a, #print_button.disabled a, 
+#send_message_button.disabled a, #save_draft_button.disabled a, 
+#undo_button.disabled a {
+  cursor: default;
+}
+
+#mark_read_button.disabled .label, #mark_unread_button.disabled .label,
+#mark_sel_read_button.disabled .label, #mark_sel_unread_button.disabled .label,
+#delete_all_button.disabled .label, #block_all_button.disabled .label,
+#save_button.disabled .label, #reply_button.disabled .label,
+#forward_button.disabled .label, #delete_button.disabled .label,
+#plain_button.disabled .label, #print_button.disabled .label,
+#send_message_button.disabled .label, #save_draft_button.disabled .label,
+#undo_button.disabled .label {
+  color: #969696;
+}
+
+#mark_read_button img, #mark_sel_read_button img {
+  background-position: 0 -2082px;
+}
+
+#mark_read_button.disabled img, #mark_sel_read_button.disabled img {
+  background-position: -28px -2082px;
+}
+
+#mark_unread_button img, #mark_sel_unread_button img {
+  background-position: 0 -2114px;
+}
+
+#mark_unread_button.disabled img, #mark_sel_unread_button.disabled img {
+  background-position: -28px -2114px;
+}
+
+#delete_all_button img, #delete_button img {
+  background-position: 0 -2051px;
+}
+
+#delete_all_button.disabled img, #delete_button.disabled img {
+  background-position: -28px -2051px;
+}
+
+#block_all_button img {
+  background-position: 0 -2144px;
+}
+
+#block_all_button.disabled img {
+  background-position: -28px -2144px;
+}
+
+/* FIXME: need correct assets */
+
+#unblock_all_button img {
+  background-position: 0 -2144px;
+}
+
+#unblock_all_button.disabled img {
+  background-position: -28px -2144px;
+}
+
+#save_button img {
+  background-position: 0 -2206px;
+}
+
+#save_button.disabled img {
+  background-position: -28px -2206px;
+}
+
+#reply_button img {
+  background-position: 0 -2299px;
+}
+
+#reply_button.disabled img {
+  background-position: -28px -2299px;
+}
+
+.move_to_inbox_button img {
+  background-position: 0 -2299px;
+}
+
+#forward_button img {
+  background-position: 0 -2330px;
+}
+
+#forward_button.disabled img {
+  background-position: -28px -2330px;
+}
+
+#plain_button img {
+  background-position: -84px -2051px;
+}
+
+#plain_button.disabled img {
+  background-position: -112px -2051px;
+}
+
+#print_button img {
+  background-position: 0px -2270px;
+}
+
+#print_button.disabled img {
+  background-position: -28px -2270px;
+}
+
+#send_message_button img {
+  background-position: 0 -2392px;
+}
+
+#send_message_button.disabled img {
+  background-position: -28px -2392px;
+}
+
+#save_draft_button img {
+  background-position: 0 -2361px;
+}
+
+#save_draft_button.disabled img {
+  background-position: -28px -2361px;
+}
+
+#undo_button img {
+  background-position: -84px -2082px;
+}
+
+#undo_button.disabled img {
+  background-position: -112px -2082px;
+}
+
+#message_buttons div.action_button,
+#mailbox_buttons div.action_button {
+  float: left;
+  display: inline;
+  position: relative;
+  margin-left: 6px;
+  background: transparent sc_static('images/oi-icons.png') 100% -2460px no-repeat;
+}
